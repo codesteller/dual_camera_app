@@ -1,25 +1,52 @@
 # Dual Camera App
 
-A Flutter application that displays both front and rear camera feeds simultaneously with responsive layout based on device orientation.
+A Flutter application that displays camera feeds with responsive layout based on device orientation.
+
+## Important Device Limitation Discovery
+
+**Finding**: During testing, we discovered that most mobile devices can only have **one camera active at a time**. This is a hardware/OS limitation, not an app limitation.
+
+**Evidence**: Camera logs show that when the front camera initializes, the rear camera automatically closes:
+```
+I/flutter: Rear camera initialized successfully
+I/flutter: Initializing front camera...
+I/CameraManagerGlobal: Camera 0 facing CAMERA_FACING_BACK state now CAMERA_STATE_CLOSED
+```
+
+## Solutions Provided
+
+### 1. **Single Camera View (Recommended)**
+- Displays one camera at a time with easy switching
+- Fast camera switching with smooth transitions
+- Works on all devices without limitations
+- Best user experience for devices with the hardware limitation
+
+### 2. **Dual Camera View (Original)**
+- Shows both camera views simultaneously
+- May show only one active camera on devices with limitations
+- Includes debug information to understand device capabilities
+- Good for testing and demonstration
+
+### 3. **Camera Diagnostic Tool**
+- Tests each camera individually
+- Provides detailed logs and status information
+- Helps troubleshoot camera-related issues
+- Useful for developers and debugging
 
 ## Features
 
 ### Core Features
-- **Dual Camera Support**: Displays both front and rear camera feeds at the same time
-- **Responsive Layout**: 
-  - Portrait mode: Cameras are displayed top and bottom (stacked vertically)
-  - Landscape mode: Cameras are displayed left and right (side by side)
-- **Permission Handling**: Automatically requests camera permissions with user-friendly prompts
+- **Camera Detection**: Automatically detects available front and rear cameras
+- **Permission Handling**: Automatic camera permission requests with user-friendly prompts
 - **Error Handling**: Graceful handling of camera initialization errors and missing cameras
-- **Camera Labels**: Clear labels to identify front and rear cameras
+- **Responsive Layout**: Adapts to device orientation changes
+- **Camera Labels**: Clear identification of active cameras
 
-### Enhanced Features (Available in EnhancedDualCameraScreen)
-- **Picture Capture**: Individual capture buttons for each camera feed
-- **Camera Position Switching**: Toggle which camera appears on top/left vs bottom/right
-- **High Resolution**: Uses high-resolution preset for better image quality
-- **Image Storage**: Saves captured images to device storage with timestamps
-- **Visual Feedback**: Loading indicators and success/error messages
-- **Control Interface**: Dedicated control bar with switch button
+### Enhanced Features
+- **Camera Switching**: Toggle between front and rear cameras
+- **Real-time Status**: Shows camera initialization and active status
+- **Debug Information**: Detailed camera status and device capability information
+- **Visual Feedback**: Loading indicators and status messages
 
 ## Setup
 
