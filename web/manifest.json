@@ -1,11 +1,11 @@
 {
-    "name": "dual_camera_app",
-    "short_name": "dual_camera_app",
+    "name": "FusionLens",
+    "short_name": "FusionLens",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Futuristic dual camera app with sci-fi UI.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

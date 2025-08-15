@@ -122,9 +122,27 @@ class _CameraDiagnosticScreenState extends State<CameraDiagnosticScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Camera Diagnostic'),
-        backgroundColor: Colors.grey[900],
-        foregroundColor: Colors.white,
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/FusionLens_logo.png',
+              height: 32,
+            ),
+            const SizedBox(width: 12),
+            const Text(
+              'Diagnostics',
+              style: TextStyle(
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+                color: Colors.cyanAccent,
+                letterSpacing: 2.0,
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: const Color(0xFF181A2A),
+        elevation: 0,
         actions: [
           IconButton(
             onPressed: isRunningDiagnostic ? null : runDiagnostic,

@@ -127,30 +127,74 @@ class _AlternatingCameraScreenState extends State<AlternatingCameraScreen> {
       return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-          title: const Text('Alternating Camera'),
-          backgroundColor: Colors.grey[900],
-          foregroundColor: Colors.white,
+          title: Row(
+            children: [
+              Image.asset(
+                'assets/FusionLens_logo.png',
+                height: 32,
+              ),
+              const SizedBox(width: 12),
+              const Text(
+                'Solo View',
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                  color: Colors.cyanAccent,
+                  letterSpacing: 2.0,
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: const Color(0xFF181A2A),
+          elevation: 0,
         ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.camera_alt,
-                color: Colors.white,
-                size: 100,
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.cyanAccent.withOpacity(0.5),
+                      blurRadius: 40,
+                      spreadRadius: 8,
+                    ),
+                  ],
+                ),
+                child: Image.asset(
+                  'assets/FusionLens_logo.png',
+                  height: 80,
+                ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
               Text(
                 errorMessage,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
+                  fontFamily: 'Roboto',
+                  letterSpacing: 1.5,
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.cyanAccent,
+                  foregroundColor: Colors.black,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  textStyle: const TextStyle(
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
                 onPressed: () {
                   initializeCameras();
                 },
@@ -166,30 +210,74 @@ class _AlternatingCameraScreenState extends State<AlternatingCameraScreen> {
       return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-          title: const Text('Alternating Camera'),
-          backgroundColor: Colors.grey[900],
-          foregroundColor: Colors.white,
+          title: Row(
+            children: [
+              Image.asset(
+                'assets/FusionLens_logo.png',
+                height: 32,
+              ),
+              const SizedBox(width: 12),
+              const Text(
+                'Solo View',
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                  color: Colors.cyanAccent,
+                  letterSpacing: 2.0,
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: const Color(0xFF181A2A),
+          elevation: 0,
         ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.error,
-                color: Colors.red,
-                size: 100,
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.cyanAccent.withOpacity(0.5),
+                      blurRadius: 40,
+                      spreadRadius: 8,
+                    ),
+                  ],
+                ),
+                child: Image.asset(
+                  'assets/FusionLens_logo.png',
+                  height: 80,
+                ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
               Text(
                 errorMessage,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
+                  fontFamily: 'Roboto',
+                  letterSpacing: 1.5,
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.cyanAccent,
+                  foregroundColor: Colors.black,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  textStyle: const TextStyle(
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
                 onPressed: () {
                   setState(() {
                     errorMessage = '';

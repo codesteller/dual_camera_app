@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -20,10 +19,8 @@ class _DualCameraCompatibilityScreenState extends State<DualCameraCompatibilityS
   bool _hasPermission = false;
   String _errorMessage = '';
   bool _isSwitching = false;
-  bool _isFrontCameraActive = false; // Track which camera is currently active - start with rear active
   late final List<CameraDescription> _cameras;
   double _switchInterval = 2.0;
-  Timer? _timer;
   Offset _pipOffset = const Offset(20, 60);
 
   @override
@@ -59,7 +56,7 @@ class _DualCameraCompatibilityScreenState extends State<DualCameraCompatibilityS
       }
     }
     await _initControllers();
-    _startAutoSwitching();
+    _startAutoRefresh();
   }
 
   Future<void> _initControllers() async {
@@ -91,25 +88,18 @@ class _DualCameraCompatibilityScreenState extends State<DualCameraCompatibilityS
     }
   }
 
-  void _startAutoSwitching() {
-    _timer = Timer.periodic(Duration(milliseconds: (1000 / _switchInterval).round()), (timer) {
-      if (mounted) {
-        _switchCameras();
-      }
-    });
+  void _startAutoRefresh() {
+    Future.delayed(Duration(seconds: _switchInterval.toInt()), _refreshCameras);
   }
 
-  void _switchCameras() {
-    if (mounted) {
-      setState(() {
-        _isFrontCameraActive = !_isFrontCameraActive;
-      });
-    }
+  void _refreshCameras() {
+    if (!mounted) return;
+    setState(() {}); // Triggers UI update, placeholder for future frame grabbing logic
+    _startAutoRefresh();
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
     _frontController?.dispose();
     _rearController?.dispose();
     super.dispose();
@@ -309,20 +299,13 @@ class _DualCameraCompatibilityScreenState extends State<DualCameraCompatibilityS
         child: _isInitialized
             ? Stack(
                 children: [
-                  // Main camera view (always rear camera)
+                  // Main camera view (always rear)
                   Positioned.fill(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: !_isFrontCameraActive 
-                            ? Border.all(color: Colors.cyanAccent, width: 4)
-                            : null,
-                      ),
-                      child: _rearController != null && _rearController!.value.isInitialized
-                          ? CameraPreview(_rearController!)
-                          : _cameraPlaceholder('Rear Camera'),
-                    ),
+                    child: _rearController != null && _rearController!.value.isInitialized
+                        ? CameraPreview(_rearController!)
+                        : _cameraPlaceholder('Rear Camera'),
                   ),
-                  // PiP overlay (always front camera)
+                  // PiP overlay (always front)
                   if (_frontController != null && _rearController != null)
                     Positioned(
                       left: _pipOffset.dx,
@@ -337,10 +320,7 @@ class _DualCameraCompatibilityScreenState extends State<DualCameraCompatibilityS
                           width: 120,
                           height: 180,
                           decoration: BoxDecoration(
-                            border: Border.all(
-                              color: _isFrontCameraActive ? Colors.cyanAccent : Colors.grey, 
-                              width: _isFrontCameraActive ? 3 : 2
-                            ),
+                            border: Border.all(color: Colors.cyanAccent, width: 2),
                             borderRadius: BorderRadius.circular(16),
                             color: Colors.black.withOpacity(0.2),
                           ),
@@ -365,11 +345,9 @@ class _DualCameraCompatibilityScreenState extends State<DualCameraCompatibilityS
                           color: Colors.black54,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Text(
-                          _isFrontCameraActive 
-                              ? 'Front Camera (Active)  |  Rear Camera (Inactive)'
-                              : 'Rear Camera (Active)  |  Front Camera (Inactive)',
-                          style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                        child: const Text(
+                          'Rear Camera (Main)  |  Front Camera (PiP)',
+                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -395,9 +373,8 @@ class _DualCameraCompatibilityScreenState extends State<DualCameraCompatibilityS
                             });
                           },
                           onChangeEnd: (v) {
-                            // Restart switching with new interval
-                            _timer?.cancel();
-                            _startAutoSwitching();
+                            // Restart refresh with new interval
+                            _startAutoRefresh();
                           },
                           activeColor: Colors.cyanAccent,
                           inactiveColor: Colors.cyanAccent.withOpacity(0.3),

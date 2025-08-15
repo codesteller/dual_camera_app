@@ -4,6 +4,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'camera_diagnostic_screen.dart';
 import 'alternating_camera_screen.dart';
 import 'dual_camera_compatibility_screen.dart';
+import 'splash_screen.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -21,21 +22,68 @@ Future<void> main() async {
   runApp(const DualCameraApp());
 }
 
+
 class DualCameraApp extends StatelessWidget {
-  const DualCameraApp({super.key});
+  const DualCameraApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Camera App',
+      title: 'FusionLens',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        brightness: Brightness.dark,
+        primarySwatch: Colors.deepPurple,
+        fontFamily: 'Roboto',
+        scaffoldBackgroundColor: Colors.black,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF181A2A),
+          foregroundColor: Colors.cyanAccent,
+          elevation: 0,
+        ),
+        colorScheme: ColorScheme.dark(
+          primary: Colors.cyanAccent,
+          secondary: Colors.deepPurpleAccent,
+        ),
+        textTheme: const TextTheme(
+          headlineMedium: TextStyle(
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.bold,
+            color: Colors.cyanAccent,
+            letterSpacing: 2.0,
+            fontSize: 32,
+          ),
+          bodyMedium: TextStyle(
+            color: Colors.white70,
+            fontSize: 16,
+          ),
+        ),
       ),
-      home: const DualCameraHome(),
+      home: const _SplashToHome(),
     );
   }
 }
+
+class _SplashToHome extends StatefulWidget {
+  const _SplashToHome();
+  @override
+  State<_SplashToHome> createState() => _SplashToHomeState();
+}
+
+class _SplashToHomeState extends State<_SplashToHome> {
+  bool _showHome = false;
+  @override
+  Widget build(BuildContext context) {
+    if (_showHome) {
+      return const DualCameraHome();
+    }
+    return SplashScreen(onFinish: () {
+      setState(() {
+        _showHome = true;
+      });
+    });
+  }
+}
+
 
 class DualCameraHome extends StatelessWidget {
   const DualCameraHome({super.key});
@@ -45,39 +93,82 @@ class DualCameraHome extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Camera App'),
-        backgroundColor: Colors.grey[900],
-        foregroundColor: Colors.white,
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/FusionLens_logo.png',
+              height: 36,
+            ),
+            const SizedBox(width: 12),
+            const Text(
+              'FusionLens',
+              style: TextStyle(
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.bold,
+                fontSize: 26,
+                color: Colors.cyanAccent,
+                letterSpacing: 2.0,
+              ),
+            ),
+          ],
+        ),
+        centerTitle: false,
+        backgroundColor: const Color(0xFF181A2A),
+        elevation: 0,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.camera_alt,
-              color: Colors.white,
-              size: 100,
+            // Futuristic logo and glow
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.cyanAccent.withOpacity(0.5),
+                    blurRadius: 60,
+                    spreadRadius: 10,
+                  ),
+                ],
+              ),
+              child: Image.asset(
+                'assets/FusionLens_logo.png',
+                height: 120,
+              ),
             ),
-            const SizedBox(height: 40),
-            const Text(
-              'Camera App with Multiple Views',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
+            const SizedBox(height: 30),
+            Text(
+              'MULTIPLE VIEWS',
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontFamily: 'Roboto',
                 fontWeight: FontWeight.bold,
+                color: Colors.cyanAccent,
+                letterSpacing: 6.0,
+                fontSize: 32,
+                shadows: [
+                  Shadow(
+                    color: Colors.cyanAccent.withOpacity(0.7),
+                    blurRadius: 12,
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 10),
             const Text(
-              'Choose your preferred camera viewing mode',
+              'Choose your futuristic camera mode',
               style: TextStyle(
                 color: Colors.white70,
-                fontSize: 16,
+                fontSize: 18,
+                fontFamily: 'Roboto',
+                letterSpacing: 2.0,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 40),
-            ElevatedButton(
+            _FuturisticButton(
+              label: 'Dual View',
+              color: Colors.cyanAccent,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -86,16 +177,11 @@ class DualCameraHome extends StatelessWidget {
                   ),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              ),
-              child: const Text(
-                'Dual Camera (May Show One)',
-                style: TextStyle(fontSize: 16),
-              ),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
+            _FuturisticButton(
+              label: 'Compat View',
+              color: Colors.deepPurpleAccent,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -104,17 +190,11 @@ class DualCameraHome extends StatelessWidget {
                   ),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                backgroundColor: Colors.purple,
-              ),
-              child: const Text(
-                'Dual Camera (Compatibility)',
-                style: TextStyle(fontSize: 16),
-              ),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
+            _FuturisticButton(
+              label: 'Solo View',
+              color: Colors.greenAccent,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -123,17 +203,11 @@ class DualCameraHome extends StatelessWidget {
                   ),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                backgroundColor: Colors.green,
-              ),
-              child: const Text(
-                'Single Camera (Recommended)',
-                style: TextStyle(fontSize: 16),
-              ),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
+            _FuturisticButton(
+              label: 'Diagnostics',
+              color: Colors.orangeAccent,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -142,16 +216,55 @@ class DualCameraHome extends StatelessWidget {
                   ),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                backgroundColor: Colors.orange,
-              ),
-              child: const Text(
-                'Camera Diagnostic',
-                style: TextStyle(fontSize: 16),
-              ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FuturisticButton extends StatelessWidget {
+  final String label;
+  final Color color;
+  final VoidCallback onPressed;
+  const _FuturisticButton({required this.label, required this.color, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 320,
+      height: 54,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: color,
+          elevation: 10,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+            side: BorderSide(color: color, width: 2),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+        ).copyWith(
+          foregroundColor: MaterialStateProperty.all(color),
+          overlayColor: MaterialStateProperty.all(color.withOpacity(0.1)),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: color,
+            letterSpacing: 2.0,
+            shadows: [
+              Shadow(
+                color: color.withOpacity(0.7),
+                blurRadius: 8,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -177,7 +290,9 @@ class _DualCameraScreenState extends State<DualCameraScreen> {
   @override
   void initState() {
     super.initState();
-    initializeCameras();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      initializeCameras();
+    });
   }
 
   Future<void> initializeCameras() async {
@@ -201,6 +316,36 @@ class _DualCameraScreenState extends State<DualCameraScreen> {
         errorMessage = 'No cameras available';
       });
       return;
+    }
+
+    // Show warning popup if only one camera is available
+    if (cameras.length == 1) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: Colors.black,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+            title: Row(
+              children: [
+                Icon(Icons.warning, color: Colors.orange[300]),
+                const SizedBox(width: 8),
+                const Text('Device Limitation', style: TextStyle(color: Colors.cyanAccent, fontWeight: FontWeight.bold)),
+              ],
+            ),
+            content: const Text(
+              'Only one camera can be active at a time on this device.',
+              style: TextStyle(color: Colors.white70, fontSize: 16, fontFamily: 'Roboto'),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK', style: TextStyle(color: Colors.cyanAccent)),
+              ),
+            ],
+          ),
+        );
+      });
     }
 
     try {
@@ -494,77 +639,42 @@ class _DualCameraScreenState extends State<DualCameraScreen> {
 
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/FusionLens_logo.png',
+              height: 32,
+            ),
+            const SizedBox(width: 12),
+            const Text(
+              'Dual View',
+              style: TextStyle(
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+                color: Colors.cyanAccent,
+                letterSpacing: 2.0,
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: const Color(0xFF181A2A),
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: isSwitching ? null : switchCamera,
+            icon: Icon(
+              showRearCamera ? Icons.camera_front : Icons.camera_rear,
+              color: isSwitching ? Colors.grey : Colors.cyanAccent,
+            ),
+            tooltip: showRearCamera ? 'Switch to Front Camera' : 'Switch to Rear Camera',
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            // Debug info panel with switch button
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(8),
-              color: Colors.orange[900],
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.warning, color: Colors.orange, size: 16),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: const Text(
-                          'Device Limitation: Only one camera can be active at a time',
-                          style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      ElevatedButton.icon(
-                        onPressed: isSwitching ? null : switchCamera,
-                        icon: Icon(
-                          showRearCamera ? Icons.camera_front : Icons.camera_rear,
-                          size: 16,
-                        ),
-                        label: Text(
-                          showRearCamera ? 'Front' : 'Rear',
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          minimumSize: const Size(80, 32),
-                          backgroundColor: isSwitching ? Colors.grey : Colors.blue,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Cameras Found: ${cameras.length} | Front: ${frontCameraController != null ? "✓" : "✗"} | Rear: ${rearCameraController != null ? "✓" : "✗"}',
-                    style: const TextStyle(color: Colors.white, fontSize: 10),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Front Init: ${frontCameraController?.value.isInitialized ?? false} | Rear Init: ${rearCameraController?.value.isInitialized ?? false}',
-                        style: const TextStyle(color: Colors.white70, fontSize: 9),
-                      ),
-                      if (isSwitching) ...[
-                        const SizedBox(width: 8),
-                        const SizedBox(
-                          width: 12,
-                          height: 12,
-                          child: CircularProgressIndicator(strokeWidth: 1.5, color: Colors.white),
-                        ),
-                        const SizedBox(width: 4),
-                        const Text(
-                          'Switching...',
-                          style: TextStyle(color: Colors.white70, fontSize: 9),
-                        ),
-                      ],
-                    ],
-                  ),
-                ],
-              ),
-            ),
             // Camera views
             Expanded(
               child: OrientationBuilder(

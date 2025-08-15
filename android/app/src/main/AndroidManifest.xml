@@ -5,7 +5,7 @@
     <uses-feature android:name="android.hardware.camera.front" android:required="false" />
     
     <application
-        android:label="dual_camera_app"
+        android:label="FusionLens"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
