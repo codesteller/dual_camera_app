@@ -120,93 +120,205 @@ class _CameraDiagnosticScreenState extends State<CameraDiagnosticScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFF0A0A0A),
       appBar: AppBar(
-        title: const Text('Camera Diagnostic'),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: Colors.orange.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                Icons.build_rounded,
+                size: 20,
+                color: Colors.orange.shade400,
+              ),
+            ),
+            const SizedBox(width: 8),
+            const Text('Camera Diagnostic'),
+          ],
+        ),
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.white,
+        elevation: 4,
         actions: [
           IconButton(
             onPressed: isRunningDiagnostic ? null : runDiagnostic,
             icon: const Icon(Icons.refresh),
+            tooltip: 'Re-run Diagnostic',
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // Status indicator
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            color: isRunningDiagnostic ? Colors.orange[900] : Colors.green[900],
-            child: Text(
-              isRunningDiagnostic ? 'Running diagnostic...' : 'Diagnostic complete',
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF1A1A2E),
+              Color(0xFF16213E),
+              Color(0xFF0F3460),
+            ],
           ),
-          // Messages list
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: diagnosticMessages.length,
-              itemBuilder: (context, index) {
-                final message = diagnosticMessages[index];
-                Color textColor = Colors.white;
-                
-                if (message.contains('✓')) {
-                  textColor = Colors.green;
-                } else if (message.contains('✗') || message.contains('Error')) {
-                  textColor = Colors.red;
-                } else if (message.contains('Camera') && message.contains(':')) {
-                  textColor = Colors.blue;
-                }
-                
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2),
-                  child: Text(
-                    message,
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 12,
-                      fontFamily: 'monospace',
+        ),
+        child: Column(
+          children: [
+            // Status indicator
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: isRunningDiagnostic 
+                    ? Colors.orange.withValues(alpha: 0.2) 
+                    : Colors.green.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isRunningDiagnostic 
+                      ? Colors.orange.withValues(alpha: 0.5) 
+                      : Colors.green.withValues(alpha: 0.5),
+                  width: 2,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: isRunningDiagnostic 
+                          ? Colors.orange.withValues(alpha: 0.3) 
+                          : Colors.green.withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      isRunningDiagnostic ? Icons.sync : Icons.check_circle,
+                      color: isRunningDiagnostic ? Colors.orange : Colors.green,
+                      size: 24,
                     ),
                   ),
-                );
-              },
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      isRunningDiagnostic ? 'Running diagnostic tests...' : 'Diagnostic completed successfully',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  if (isRunningDiagnostic)
+                    SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.orange.shade400),
+                      ),
+                    ),
+                ],
+              ),
             ),
-          ),
-          // Action buttons
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Back to Home'),
+            // Messages list
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                    width: 1,
                   ),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const DualCameraScreen(),
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: diagnosticMessages.length,
+                  itemBuilder: (context, index) {
+                    final message = diagnosticMessages[index];
+                    Color textColor = Colors.white;
+                    
+                    if (message.contains('✓')) {
+                      textColor = Colors.green;
+                    } else if (message.contains('✗') || message.contains('Error')) {
+                      textColor = Colors.red;
+                    } else if (message.contains('Camera') && message.contains(':')) {
+                      textColor = Colors.blue;
+                    }
+                    
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        message,
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: 12,
+                          fontFamily: 'monospace',
                         ),
-                      );
-                    },
-                    child: const Text('Test Dual Camera'),
-                  ),
+                      ),
+                    );
+                  },
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
+            // Action buttons
+            Container(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.home),
+                      label: const Text('Back to Home'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey.shade700,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const DualCameraScreen(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.camera_alt),
+                      label: const Text('Test Camera'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

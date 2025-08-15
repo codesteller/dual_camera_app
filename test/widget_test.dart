@@ -1,26 +1,26 @@
-// This is a basic Flutter widget test for the Dual Camera App.
+// This is a basic Flutter widget test for FusionLens.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:dual_camera_app/main.dart';
+import 'package:fusion_lens/main.dart';
 
 void main() {
-  testWidgets('Dual Camera App smoke test', (WidgetTester tester) async {
+  testWidgets('FusionLens smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const DualCameraApp());
+    await tester.pumpWidget(const FusionLensApp());
 
     // Verify that the app starts and shows the home screen
     expect(find.byType(MaterialApp), findsOneWidget);
-    expect(find.text('Dual Camera App'), findsWidgets);
-    expect(find.text('Open Basic Camera View'), findsOneWidget);
+    expect(find.text('FusionLens'), findsWidgets);
+    expect(find.text('Advanced Camera Experience'), findsOneWidget);
   });
 
   testWidgets('Navigation to camera screen test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const DualCameraApp());
+    await tester.pumpWidget(const FusionLensApp());
 
     // Find and tap the camera button
-    final cameraButton = find.text('Open Basic Camera View');
+    final cameraButton = find.text('Dual Camera View');
     expect(cameraButton, findsOneWidget);
 
     await tester.tap(cameraButton);
