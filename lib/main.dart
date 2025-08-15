@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'camera_diagnostic_screen.dart';
 import 'alternating_camera_screen.dart';
+import 'dual_camera_compatibility_screen.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -90,6 +91,25 @@ class DualCameraHome extends StatelessWidget {
               ),
               child: const Text(
                 'Dual Camera (May Show One)',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DualCameraCompatibilityScreen(),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                backgroundColor: Colors.purple,
+              ),
+              child: const Text(
+                'Dual Camera (Compatibility)',
                 style: TextStyle(fontSize: 16),
               ),
             ),
